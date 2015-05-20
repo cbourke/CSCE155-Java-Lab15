@@ -1,0 +1,44 @@
+<project name="CSCE155H JDBC Lab" basedir="." default="compile">
+
+    <property name="src.dir" value="src"/> 
+    <property name="lib.dir" value="lib"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/> 
+    <property name="sql.driver" value="mysql-connector-java-5.1.17-bin.jar"/>
+    <property name="list.games.main" value="unl.cse.games.ListGames"/>
+    <property name="insert.game.main" value="unl.cse.games.InsertGame"/>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <!-- executable and fork properties added as a workaround for CSE's ant configuration 2013-12-06 -->  
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac 
+         includeantruntime="false" 
+         executable="/usr/bin/javac"
+         fork="true"
+         srcdir="${src.dir}" destdir="${classes.dir}"/>
+    </target>
+
+    <path id="run.path">
+      <pathelement path="${classes.dir}"/>
+      <pathelement location="${lib.dir}/${sql.driver}"/>
+    </path>
+
+    <target name="run-list">
+       <java classname="${list.games.main}"
+             fork="true">
+         <classpath refid="run.path"/>
+       </java>
+    </target>
+
+    <target name="run-insert">
+       <java classname="${insert.game.main}"
+             fork="true">
+         <classpath refid="run.path"/>
+       </java>
+    </target>
+
+</project>
