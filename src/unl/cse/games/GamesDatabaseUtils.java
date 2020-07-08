@@ -13,6 +13,15 @@ import unl.cse.games.DatabaseInfo;
 
 public class GamesDatabaseUtils {
 
+	/**
+	 * Adds an availability record to the availability table for the given <code>gameId</code>
+	 * and <code>platformId</code> along with the given <code>publishYear</code>.  This models
+	 * the fact that a certain game is available on a certain platform.
+	 * 
+	 * @param gameId
+	 * @param platformId
+	 * @param publishYear
+	 */
 	public static void addAvailability(Integer gameId, Integer platformId, Integer publishYear) {
 		
 		String query = "INSERT INTO availability (game_id,platform_id,publish_year) VALUES (?, ?, ?)";
@@ -44,10 +53,17 @@ public class GamesDatabaseUtils {
 		return;		
 	}
 
+	/**
+	 * This method adds a new publisher record to the publisher table with
+	 * the given <code>name</code>
+	 * 
+	 * @param name
+	 */
 	public static void addPublisher(String name) {
 		
 		//unprepared statement intentionally done so that 
 		//you can sanitize it in the advanced activity
+		//you would NEVER do something like this in real life
 		String query = "INSERT INTO publisher (name) VALUES ('"+name+"')";
 		
 		Connection conn = getConnection();
@@ -74,6 +90,12 @@ public class GamesDatabaseUtils {
 		return;
 	}
 	
+	/**
+	 * This method adds a new platform record to the platform table
+	 * with the given <code>name</code>
+	 * 
+	 * @param name
+	 */
 	public static void addPlatform(String name) {
 		
 		String query = "INSERT INTO platform (name) VALUES (?);";
@@ -103,6 +125,14 @@ public class GamesDatabaseUtils {
 		return;
 	}
 
+	/**
+	 * This method adds a new video game record to the game table with the
+	 * given <code>name</code> (title) and publisher represented by their
+	 * <code>publisherId</code>
+	 * 
+	 * @param name
+	 * @param publisherId
+	 */
 	public static void addVideoGame(String name, Integer publisherId) {
 		
 		String query = "INSERT INTO game (name,publisher_id) VALUES (?,?)";
@@ -133,6 +163,12 @@ public class GamesDatabaseUtils {
 		return;
 	}
 	
+	/**
+	 * This method queries all video game data from the
+	 * database and returns a <code>List</code> of 
+	 * {@link #VideoGame} object instances.
+	 * @return
+	 */
 	public static List<VideoGame> getAllGames() {
 		
 		String query = "SELECT g.game_id, g.name, p.publisher_id, p.name FROM game g JOIN publisher p ON g.publisher_id = p.publisher_id";
@@ -173,6 +209,14 @@ public class GamesDatabaseUtils {
 		return games;	
 	}
 	
+	/**
+	 * This method queries the database for video game data for a
+	 * particular video game represented by the given <code>name</code>
+	 * (title of the game).
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public static VideoGame getGame(String name) {
 		
 		String query = "SELECT g.game_id, g.name, p.publisher_id, p.name FROM game g JOIN publisher p ON g.publisher_id = p.publisher_id WHERE g.name = ?";
